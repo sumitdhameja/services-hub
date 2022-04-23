@@ -4,6 +4,6 @@ type Service struct {
 	BaseModel
 	Title           string           `json:"title"`
 	Description     string           `json:"description"`
-	UserID          string           `gorm:"size:191"`
-	ServiceVersions []ServiceVersion `gorm:"foreignKey:ServiceID"`
+	UserID          string           `json:"user_id" gorm:"size:191"`
+	ServiceVersions []ServiceVersion `json:"service_versions" gorm:"foreignKey:ServiceID"`
 }

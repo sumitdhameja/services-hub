@@ -12,16 +12,16 @@ import (
 var ENV string = "dev"
 
 type Config struct {
-	LogLevel string `yaml:"log_level",envconfig:"LOG_LEVEL"`
+	LogLevel string `yaml:"log_level" envconfig:"LOG_LEVEL"`
 	Server   struct {
-		Port int    `yaml:"port", envconfig:"SERVER_PORT"`
+		Port int    `yaml:"port" envconfig:"SERVER_PORT"`
 		Host string `yaml:"host"`
 	} `yaml:"server"`
 	Database struct {
-		Host           string `yaml:"host", envconfig:"DB_HOST"`
-		Port           int    `yaml:"port", envconfig:"DB_PORT"`
-		Username       string `yaml:"user", envconfig:"DB_USERNAME"`
-		Password       string `yaml:"pass",envconfig:"DB_PASSWORD"`
+		Host           string `yaml:"host" envconfig:"DB_HOST"`
+		Port           int    `yaml:"port" envconfig:"DB_PORT"`
+		Username       string `yaml:"user" envconfig:"DB_USERNAME"`
+		Password       string `yaml:"pass" envconfig:"DB_PASSWORD"`
 		MaxConnections int    `yaml:"max_connections"`
 	} `yaml:"database"`
 }

@@ -30,7 +30,7 @@ func (p appService) GetAllService(userID string, pageable dto.Pageable) (*[]mode
 
 	if err := p.db.Preload("Services.ServiceVersions").First(&user, &models.User{BaseModel: models.BaseModel{ID: userID}}).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.New("no user found")
+			return nil, errors.New("no record found")
 		}
 		return nil, errors.New("unknown error")
 	}
@@ -44,7 +44,7 @@ func (p appService) GetService(userID string, id string) (*models.Service, error
 
 	if err := p.db.Preload("ServiceVersions").Where(&models.Service{UserID: userID}).First(&service, &models.Service{BaseModel: models.BaseModel{ID: id}}).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.New("no user found")
+			return nil, errors.New("no record found")
 		}
 		return nil, errors.New("unknown error")
 	}
