@@ -2,7 +2,9 @@ package models
 
 type ServiceVersion struct {
 	BaseModel
-	Name      string
-	ServiceID int
-	Service   Service
+	Version        string
+	URL            string
+	OtherCoolStuff string
+	ServiceID      string `gorm:"size:191"`
+	Service        Service
 }
