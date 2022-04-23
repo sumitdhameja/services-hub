@@ -7,5 +7,7 @@ import (
 
 func AutoMigrate(db *gorm.DB) {
 	logger.Info("Migrating model")
-	// TODO: auto migrate models
+	if err := db.AutoMigrate(&User{}, &Service{}, &ServiceVersion{}); err != nil {
+		logger.Error("Can't automigrate schema %v", err)
+	}
 }

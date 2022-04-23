@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/sumitdhameja/services-hub/internal/errors"
 	"github.com/sumitdhameja/services-hub/internal/logger"
+	"github.com/sumitdhameja/services-hub/internal/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	gormlogger "gorm.io/gorm/logger"
@@ -52,6 +53,7 @@ func serverInit() {
 	if err != nil {
 		logger.Fatal("Can't connect to database")
 	}
+	go models.AutoMigrate(db)
 
 	sqlDB.SetMaxOpenConns(cfg.Database.MaxConnections)
 	defer func() {

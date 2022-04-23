@@ -1,3 +1,8 @@
 package models
 
-// TODO
+type Service struct {
+	BaseModel
+	Name   string
+	UserID int
+	User   User
+}
