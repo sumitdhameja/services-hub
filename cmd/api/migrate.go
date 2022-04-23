@@ -32,7 +32,7 @@ func migrate() {
 	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/service_hub?charset=UTF8&parseTime=true", cfg.Database.Username, cfg.Database.Password, cfg.Database.Host, cfg.Database.Port)
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
-		Logger: gormlogger.Default.LogMode(gormlogger.Silent),
+		Logger: gormlogger.Default.LogMode(gormlogger.Warn),
 	})
 	if err != nil {
 		logger.Fatal("Failed to connect database: ", err)

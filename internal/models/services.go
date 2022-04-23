@@ -2,9 +2,8 @@ package models
 
 type Service struct {
 	BaseModel
-	Name        string
-	Title       string
-	Description string
-	UserID      string `gorm:"size:191"`
-	User        User
+	Title           string           `json:"title"`
+	Description     string           `json:"description"`
+	UserID          string           `gorm:"size:191"`
+	ServiceVersions []ServiceVersion `gorm:"foreignKey:ServiceID"`
 }

@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
+	v1 "github.com/sumitdhameja/services-hub/internal/api/v1"
 	"github.com/sumitdhameja/services-hub/internal/errors"
 	"github.com/sumitdhameja/services-hub/internal/logger"
 	"github.com/sumitdhameja/services-hub/internal/models"
@@ -49,11 +50,11 @@ func serverInit() {
 	if err != nil {
 		logger.Fatal("Failed to connect database: ", err)
 	}
+	go models.AutoMigrate(db)
 	sqlDB, err := db.DB()
 	if err != nil {
 		logger.Fatal("Can't connect to database")
 	}
-	go models.AutoMigrate(db)
 
 	sqlDB.SetMaxOpenConns(cfg.Database.MaxConnections)
 	defer func() {
@@ -63,5 +64,7 @@ func serverInit() {
 
 	router := gin.New()
 	router.Use(errors.GinError())
+	apiV1Router := router.Group("/api/v1")
+	v1.RegisterRouterAPIV1(apiV1Router, db)
 	router.Run(fmt.Sprintf("%s:%d", cfg.Server.Host, cfg.Server.Port))
 }
