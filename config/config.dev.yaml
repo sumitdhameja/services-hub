@@ -1,0 +1,16 @@
+# Server configurations
+log_level:
+  "debug"
+server:
+  host: "localhost"
+  port: 8000
+
+# Database credentials
+database:
+  host: "127.0.0.1"
+  port: 3306
+  user: "svc_demo"
+  pass: "P@ssw0rd"
+  max_connections: -1
+
+
