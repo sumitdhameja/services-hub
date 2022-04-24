@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-
+SOURCES := $(shell find . -name '*.go')
 BINARY=service-hub
 VERSION?=$(shell git describe --always --tags)
 COMMIT=`git rev-parse HEAD`
@@ -17,15 +17,12 @@ run: check
 build:
 	go build ${LDFLAGS} -o bin/${BINARY} ./cmd/api/
 
-check: check-vet check-fmt
+check: check-fmt
 	@echo "[+] Done"
 
 check-vet:
 	@echo "[-] Checking go vet..."
-	@go vet $$(go list ./... | grep -v vendor/) ; if [ $$? -eq 1 ]; then \
-		echo "[x] Vet found suspicious constructs!"; \
-		exit 1; \
-	fi
+	@go vet -v ./...
 
 check-fmt:
 	@echo "[-] Checking gofmt..."
