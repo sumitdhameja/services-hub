@@ -5,6 +5,7 @@ import (
 
 	"github.com/sumitdhameja/services-hub/internal/dto"
 	"github.com/sumitdhameja/services-hub/internal/models"
+	"github.com/sumitdhameja/services-hub/internal/utils"
 	"gorm.io/gorm"
 )
 
@@ -15,7 +16,7 @@ type appService struct {
 
 //AppService interface
 type AppService interface {
-	GetAllService(userID string, page dto.Pageable) (*[]models.Service, error)
+	GetAllService(userID string, page *dto.Pageable) (*[]models.Service, error)
 	GetService(userID string, id string) (*models.Service, error)
 }
 
@@ -25,13 +26,16 @@ func NewAppService(db *gorm.DB) AppService {
 }
 
 // GetAllService return all AppService
-func (p appService) GetAllService(userID string, pageable dto.Pageable) (*[]models.Service, error) {
+func (p appService) GetAllService(userID string, pageable *dto.Pageable) (*[]models.Service, error) {
+
 	user := new(models.User)
 
-	if err := p.db.Preload("Services.ServiceVersions").First(&user, &models.User{BaseModel: models.BaseModel{ID: userID}}).Error; err != nil {
+	err := p.db.Preload("Services", utils.PaginateScope(pageable)).Preload("Services.ServiceVersions").First(&user, &models.User{BaseModel: models.BaseModel{ID: userID}}).Error
+	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("no record found")
 		}
+
 		return nil, errors.New("unknown error")
 	}
 

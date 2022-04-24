@@ -35,13 +35,6 @@ func init() {
 
 func serverInit() {
 
-	logger.Info("[-] SERVICE HUB")
-	logger.Info("    - Version:", VERSION)
-	logger.Info("    - Commit:", COMMIT)
-	logger.Info("[-] SERVER")
-	logger.Info("    - HOST: ", cfg.Server.Host)
-	logger.Info("    - PORT: ", cfg.Server.Port)
-
 	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/service_hub?charset=UTF8&parseTime=true", cfg.Database.Username, cfg.Database.Password, cfg.Database.Host, cfg.Database.Port)
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
@@ -61,6 +54,13 @@ func serverInit() {
 		sqlDB.Close()
 		logger.Info("Closed db connection")
 	}()
+
+	logger.Info("[-] SERVICE HUB")
+	logger.Info("    - Version:", VERSION)
+	logger.Info("    - Commit:", COMMIT)
+	logger.Info("[-] SERVER")
+	logger.Info("    - HOST: ", cfg.Server.Host)
+	logger.Info("    - PORT: ", cfg.Server.Port)
 
 	router := gin.New()
 	router.Use(errors.GinError())

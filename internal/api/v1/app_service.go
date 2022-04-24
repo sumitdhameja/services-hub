@@ -28,13 +28,15 @@ type AppServiceAPI interface {
 
 func (p *appServiceAPI) GetAllService(ctx *gin.Context) {
 	userID := ctx.Param("user_id")
+	pageOptions := ctx.MustGet("page_options").(dto.Pageable)
 
-	services, err := p.service.GetAllService(userID, dto.Pageable{})
+	services, err := p.service.GetAllService(userID, &pageOptions)
 	if err != nil {
 		ctx.Error(errors.NewError(http.StatusBadRequest, err.Error()))
 		return
 	}
-	ctx.JSON(http.StatusOK, dto.DataResponse{Data: services})
+	pageOptions.Rows = services
+	ctx.JSON(http.StatusOK, dto.DataResponse{Data: struct{ dto.Pageable }{pageOptions}})
 }
 
 // GetService return only one Service
