@@ -10,13 +10,23 @@ default: run
 
 LDFLAGS=-ldflags "-X main.VERSION=${VERSION} -X main.COMMIT=${COMMIT} -X main.ENV=${ENV}"
 
+.PHONY: root
+root:
+	@go run ${LDFLAGS} ./cmd/api/
+
+.PHONY: migrate
+migrate:
+	@go run ${LDFLAGS} ./cmd/api/ migrate
+
 .PHONY: run
 run: check
 	@go run ${LDFLAGS} ./cmd/api/ server
 
+.PHONY: build
 build:
 	go build ${LDFLAGS} -o bin/${BINARY} ./cmd/api/
 
+.PHONY: check
 check: check-fmt
 	@echo "[+] Done"
 
@@ -34,6 +44,7 @@ check-fmt:
 		exit 1; \
 	fi
 
+.PHONY: fmt
 fmt:
 	@echo "[-] Formating gofmt..."
 	@gofmt -w $(SOURCES)
