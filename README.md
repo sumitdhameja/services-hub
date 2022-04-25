@@ -133,3 +133,38 @@ $ VERSION=1.0.0 ENV=dev make build
    ```bash
    $ go run ./cmd/api server
    ```
+
+## Considerations & improvements
+
+I chose to use gorm library(wanted to try it out). The solution seems clean using gorm(preloads dependents in struct), however makes multiple round trips to DB.
+If roundtrips to DB is an issue. Performance can be obtained by either of the below:
+
+1. use standard golang SQL library. LEFT JOIN users with services and service_versions table
+   - This provides single round trip to DB. However, will produce more rows because of multiple versions associated with each service.
+2. Use SQL functions to generate JSON which can be scanned into a struct. Example query is below. SQL will return aggregated JSON as a single field.
+
+   - This would be the most efficient solution(but not so ellegant). This could be difficult to maintain, since any change in structs in golang or SQL may break the code. Also, if you would like to switch to another relational DB, the query may need to be tested.
+
+   ```sql
+   SELECT
+   JSON_ARRAYAGG(JSON_OBJECT('id', u.id, 'email', u.email, 'services', s.services))
+   FROM
+      users u
+
+      LEFT JOIN (
+         SELECT
+               user_id,
+               id,
+               JSON_ARRAYAGG(JSON_OBJECT('id', id, 'title', title, 'description', description, 'service_versions', sv.json_versions)) services
+         FROM services s
+               LEFT JOIN (
+                  SELECT
+                     service_id,
+                     JSON_ARRAYAGG(JSON_OBJECT('id', id, 'version', version)) json_versions
+                  FROM service_versions
+                  GROUP BY service_id
+               ) sv ON sv.service_id = s.id
+         GROUP BY user_id,id
+      ) s ON s.user_id = u.id
+      WHERE u.id = '0be2de59-56e0-47a7-aabc-a82ae064c85f'
+   ```
