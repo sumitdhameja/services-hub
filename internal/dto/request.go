@@ -1,11 +1,10 @@
 package dto
 
 type Pageable struct {
-	Limit     int         `json:"limit,omitempty" form:"limit"`
-	Page      int         `json:"page,omitempty" form:"page"`
-	TotalRows int64       `json:"total_rows"`
-	Rows      interface{} `json:"rows"`
-	Search    string      `json:"search" form:"search"`
+	Limit  int         `json:"limit,omitempty" form:"limit"`
+	Page   int         `json:"page,omitempty" form:"page"`
+	Rows   interface{} `json:"rows"`
+	Search string      `json:"search" form:"search"`
 }
 
 func (p *Pageable) GetOffset() int {

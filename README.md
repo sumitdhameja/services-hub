@@ -168,3 +168,7 @@ If roundtrips to DB is an issue. Performance can be obtained by either of the be
       ) s ON s.user_id = u.id
       WHERE u.id = '0be2de59-56e0-47a7-aabc-a82ae064c85f'
    ```
+
+3. Index is created on title field for fast lookups using FULLTEXT search
+4. Other design considerations for improvements
+   - Cache data in memory(redis/memcache) for a given user's services for faster lookups and apply pagination. Clear cache on POST/UPDATE for a given record
