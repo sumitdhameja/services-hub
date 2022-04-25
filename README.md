@@ -2,10 +2,6 @@
 
 ![](https://storage.googleapis.com/bc-ops/github-gif/service-hub.png)
 
-TODO:
-
-- Check SQL schema generated and tune if needed
-
 **Services Hub API** is a API build using gin/gorm. The API can be run as a command
 
 ## Structure and Assumptions
