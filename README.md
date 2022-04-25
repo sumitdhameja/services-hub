@@ -78,13 +78,9 @@
 |____.git
 ```
 
-## Build
+## Configuration
 
-Use Makefile to build the project. The binary generated would be added to /bin folder
-
-```bash
-$ VERSION=1.0.0 ENV=dev make build
-```
+Configuration options are available under config/config.dev.yaml. Configuration Options can also be set as environment variables.
 
 ## Getting Started
 
@@ -129,6 +125,14 @@ $ VERSION=1.0.0 ENV=dev make build
    ```bash
    $ go run ./cmd/api server
    ```
+
+## Build
+
+Use Makefile to build the project. The binary generated would be added to /bin folder
+
+```bash
+$ VERSION=1.0.0 ENV=dev make build
+```
 
 ## Considerations & improvements
 
