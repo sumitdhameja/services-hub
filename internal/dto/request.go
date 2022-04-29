@@ -1,6 +1,10 @@
 package dto
 
-import "regexp"
+import (
+	"bytes"
+	"fmt"
+	"regexp"
+)
 
 type Pageable struct {
 	Limit  int         `json:"limit,omitempty" form:"limit"`
@@ -71,4 +75,20 @@ func (p *Pageable) GetSearchOptions() []SearchOptions {
 	}
 	return searchOptions
 
+}
+
+func (p *Pageable) BuildSearchString() (string, []interface{}) {
+	var searchByteBuffer bytes.Buffer
+	sOptions := p.GetSearchOptions()
+	sValues := []interface{}{}
+
+	for i, s := range sOptions {
+		searchByteBuffer.WriteString(fmt.Sprintf(" %s %s ? ", s.Column, s.Operator))
+		sValues = append(sValues, fmt.Sprintf("%%%v%%", s.SearchString))
+		if i < len(sOptions)-1 {
+			searchByteBuffer.WriteString("OR")
+		}
+	}
+
+	return searchByteBuffer.String(), sValues
 }

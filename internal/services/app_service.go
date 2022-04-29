@@ -29,6 +29,9 @@ func NewAppService(db *gorm.DB) AppService {
 func (p appService) GetAllService(userID string, pageable *dto.Pageable) (*[]models.Service, error) {
 
 	user := new(models.User)
+	searchStr, values := pageable.BuildSearchString()
+
+	p.db.Table("Services").Where("services.user_id = ? ", userID).Where(searchStr, values...).Count(&pageable.Total) // GORM doesnt let you run counts on preloads https://github.com/go-gorm/playground/pull/385
 
 	err := p.db.Preload("Services", utils.PaginateScope(pageable)).Preload("Services.ServiceVersions").First(&user, &models.User{BaseModel: models.BaseModel{ID: userID}}).Error
 	if err != nil {
