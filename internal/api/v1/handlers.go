@@ -9,7 +9,7 @@ import (
 func RegisterRouterAPIV1(router *gin.RouterGroup, db *gorm.DB) {
 
 	appServiceAPI := NewAppServiceAPI(db)
-	router.GET("users/:user_id/services", middleware.Paginate(), appServiceAPI.GetAllService)
+	router.GET("users/:user_id/services", middleware.Paginate(), middleware.Validate(), appServiceAPI.GetAllService)
 	router.GET("users/:user_id/services/:id", appServiceAPI.GetService)
 
 }

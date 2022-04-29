@@ -1,10 +1,22 @@
 package dto
 
+import "regexp"
+
 type Pageable struct {
 	Limit  int         `json:"limit,omitempty" form:"limit"`
 	Page   int         `json:"page,omitempty" form:"page"`
 	Rows   interface{} `json:"rows"`
 	Search string      `json:"search" form:"search"`
+	Total  int64       `json:"total"`
+}
+
+var regSQL = "('(''|[^'])*')|(;)|(\b(ALTER|CREATE|DELETE|DROP|EXEC(UTE){0,1}|INSERT( +INTO){0,1}|MERGE|SELECT|UPDATE|UNION( +ALL){0,1})\b)"
+
+func (p *Pageable) SetDefaults() {
+	p.Limit = 0
+	p.Page = 1
+	p.Search = ""
+
 }
 
 func (p *Pageable) GetOffset() int {
@@ -19,10 +31,20 @@ func (p *Pageable) GetLimit() int {
 }
 
 func (p *Pageable) GetPage() int {
+
 	if p.Page == 0 {
 		p.Page = 1
 	}
 	return p.Page
+}
+
+func (p *Pageable) GetSearchString() string {
+	match, _ := regexp.MatchString(regSQL, p.Search)
+	if match {
+		return ""
+	}
+	return p.Search
+
 }
 
 type SearchOptions struct {
@@ -39,12 +61,12 @@ func (p *Pageable) GetSearchOptions() []SearchOptions {
 		{
 			Column:       "title",
 			Operator:     "LIKE",
-			SearchString: p.Search,
+			SearchString: p.GetSearchString(),
 		},
 		{
 			Column:       "description",
 			Operator:     "LIKE",
-			SearchString: p.Search,
+			SearchString: p.GetSearchString(),
 		},
 	}
 	return searchOptions
