@@ -2,7 +2,7 @@
 
 ![](https://storage.googleapis.com/bc-ops/github-gif/service-hub.png)
 
-**Services Hub API** is a API build using gin/gorm. The API can be run as a command
+**Services Hub API** is a API build using gin/gorm. The API can be run as a command. This can be used as a boilerplate template showcasing API capabilities in golang
 
 ## Structure and Assumptions
 
